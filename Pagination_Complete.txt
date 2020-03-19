@@ -1,0 +1,158 @@
+
+
+ import { Component, OnInit } from '@angular/core';
+
+ @Component({
+   selector: 'app-root',
+   templateUrl: './app.component.html',
+   styleUrls: ['./app.component.css']
+ })
+ export class AppComponent implements OnInit
+  {
+
+    public x:number = 0;
+    public pagesize:number = 15;
+    public y:number = this.pagesize; 
+    
+
+    public toggleNext:boolean = false;
+    public togglePrev:boolean = true;
+
+    public pageCount:number = 0;
+
+     public ar:any[] = new Array();
+     public ar2:any[] = new Array();  // Dummy for creating  repeated buttons
+
+
+     public ngOnInit()
+     {
+      // an example array of 150 items to be paged
+      // this.ar = Array(25).fill(0).map((x, i) => ({ id: (i + 1), name: `Narasimha- ${i + 1}`}));
+
+      let count = 113;
+      for(let i = 0; i < count; i++)
+      {
+        let obj:any = {};
+        obj.id = i + 1;
+        obj.name  = "Narasimha-" + (i+1) ;
+        this.ar.push(obj);
+      }
+
+      this.pageCount = Math.ceil( this.ar.length / this.pagesize);
+      this.ar2 = new Array(this.pageCount);
+
+  }
+
+ 
+
+
+    public f3()
+    {
+       this.x = this.x + this.pagesize;
+       this.y = this.y + this.pagesize;
+       this.togglePrev = false;
+
+       if(this.y >=  this.ar.length)
+       {       
+         this.toggleNext = true;
+       }
+
+    }
+
+    public f2()
+    {
+       this.x = this.x - this.pagesize;
+       this.y = this.y - this.pagesize;
+       this.toggleNext = false;
+
+       if(this.y <= this.pagesize)
+       {        
+         this.togglePrev = true;
+       }
+    }
+
+    public f1()
+    {
+       this.x = 0;
+       this.y = this.pagesize;
+       this.togglePrev = true;
+       this.toggleNext = false;
+    }
+
+
+    // Last
+    public f4()
+    {
+
+          
+
+      if(this.ar.length % this.pagesize == 0 )
+      {
+        this.x = this.ar.length - this.pagesize;
+        this.y = this.x  + this.pagesize;
+      }
+      else
+      {
+        this.x =  Math.floor(this.ar.length / this.pagesize) * this.pagesize;
+        this.y = this.x  + this.pagesize; 
+      }
+      
+      
+       this.togglePrev = false;
+       this.toggleNext = true;
+    }
+
+
+    public  f5(n:number)
+    {
+      this.x = n * this.pagesize;
+      this.y = this.x  + this.pagesize;
+    }
+ }
+ -------------------------------------------------------------------------------------------
+ 
+ 
+ <style>
+  ul, li
+  {
+    list-style: none;
+   display: inline;
+  }
+</style> 
+
+
+<h3> Angular Splice Pipe Demo </h3>
+ <hr/>
+
+ <!-- <h1> {{x}}  , {{y}} </h1> -->
+
+
+ <input type="button"  (click)="f1()"  value="First"  />
+ <input type="button"  [disabled]="togglePrev"  (click)="f2()"  value="Prev"  />
+ <ul style="margin: 0px; padding:0px;">
+    <li *ngFor="let n of ar2; let i = index;">
+      <input type="button" (click)="f5(i)" value="{{i+1}}"  />
+  </li>
+ </ul>
+ <input type="button"  [disabled]="toggleNext"  (click)="f3()"  value="Next"  />
+ <input type="button"   (click)="f4()"  value="Last"  />
+
+ 
+ <br/><br/>
+
+ <table  border="2"  width="250">
+   <tr>
+     <td>Student Id </td>
+     <td>Student Name </td>
+   </tr>
+   <tr *ngFor="let item of ar | slice:x:y">
+    <td>{{item.id}}</td>
+    <td>{{item.name}}</td>
+     </tr>
+ </table>
+ ----------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
