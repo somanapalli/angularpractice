@@ -1,0 +1,131 @@
+
+
+*.ts  file
+~~~~~~~~~~~
+
+ import { Component } from '@angular/core';
+
+ @Component({
+   selector: 'app-root',
+   templateUrl: './app.component.html',
+   styleUrls: ['./app.component.css']
+ })
+ export class AppComponent
+  {
+
+    public x:number = 0;
+    public pagesize:number = 4;
+    public y:number = this.pagesize; 
+    
+
+    public toggleNext:boolean = false;
+    public togglePrev:boolean = true;
+
+
+     public ar:any[]  = [
+       { sid : 1,  sname :  "Scott-1" },
+       { sid : 2,  sname :  "Scott-2" },
+       { sid : 3,  sname :  "Scott-3" },
+       { sid : 4,  sname :  "Scott-4" },
+       { sid : 5,  sname :  "Scott-5" },
+       { sid : 6,  sname :  "Scott-6" },
+       { sid : 7,  sname :  "Scott-7" },
+       { sid : 8,  sname :  "Scott-8" },
+       { sid : 9,  sname :  "Scott-9" }, 
+       { sid : 10,  sname :  "Scott-10" },
+       { sid : 11,  sname :  "Scott-11" },
+       { sid : 12,  sname :  "Scott-12" },
+       { sid : 13,  sname :  "Scott-13" }
+     ];
+
+ 
+
+
+    public f3()
+    {
+       this.x = this.x + this.pagesize;
+       this.y = this.y + this.pagesize;
+       this.togglePrev = false;
+
+       if(this.y >=  this.ar.length)
+       {       
+         this.toggleNext = true;
+       }
+
+    }
+
+    public f2()
+    {
+       this.x = this.x - this.pagesize;
+       this.y = this.y - this.pagesize;
+       this.toggleNext = false;
+
+       if(this.y <= this.pagesize)
+       {        
+         this.togglePrev = true;
+       }
+    }
+
+    public f1()
+    {
+       this.x = 0;
+       this.y = this.pagesize;
+       this.togglePrev = true;
+       this.toggleNext = false;
+    }
+
+
+    // Last
+    public f4()
+    {
+
+          
+
+      if(this.ar.length % this.pagesize == 0 )
+      {
+        this.x = this.ar.length - this.pagesize;
+        this.y = this.x  + this.pagesize;
+      }
+      else
+      {
+        this.x =  Math.floor(this.ar.length / this.pagesize) * this.pagesize;
+        this.y = this.x  + this.pagesize; 
+      }
+      
+      
+       this.togglePrev = false;
+       this.toggleNext = true;
+    }
+
+
+ }
+ ---------------------------------------------------------------------
+ 
+ *.html file
+ ~~~~~~~~~~~~~
+
+ <h3> Angular Splice Pipe Demo </h3>
+ <hr/>
+
+ <!-- <h1> {{x}}  , {{y}} </h1> -->
+
+
+ <input type="button"  (click)="f1()"  value="First"  />
+ <input type="button"  [disabled]="togglePrev"  (click)="f2()"  value="Prev"  />
+ <input type="button"  [disabled]="toggleNext"  (click)="f3()"  value="Next"  />
+ <input type="button"   (click)="f4()"  value="Last"  />
+ 
+
+
+ <br/><br/>
+
+ <table  border="2"  width="250">
+   <tr>
+     <td>Student Id </td>
+     <td>Student Name </td>
+   </tr>
+   <tr *ngFor="let item of ar | slice:x:y">
+    <td>{{item.sid}}</td>
+    <td>{{item.sname}}</td>
+     </tr>
+ </table>
